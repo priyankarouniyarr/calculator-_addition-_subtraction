@@ -33,7 +33,10 @@ class _MyCalculatorState extends State<MyCalculator> {
   String operator = "";
 
   void onbtnPressed(String s) {
+    //function created
+
     if (operator.isEmpty) {
+      //operator set ky baad
       setState(() {
         firstnum = firstnum + s;
       });
@@ -42,6 +45,18 @@ class _MyCalculatorState extends State<MyCalculator> {
         secondnum = secondnum + s;
       });
     }
+  }
+
+  void butvalue(String value) {
+    if (value == "AC") {
+      firstnum = "";
+
+      secondnum = "";
+      result = "";
+      operator = "";
+    }
+
+    setState(() {});
   }
 
   @override
@@ -89,9 +104,12 @@ class _MyCalculatorState extends State<MyCalculator> {
                 ),
                 ResuableButton(
                   onTap: () {
-                    operator = "+";
-                    secondnum = "";
-                    setState(() {});
+                    if (firstnum.isNotEmpty) {
+                      //print("+");
+                      operator = "+";
+                      secondnum = "";
+                      setState(() {});
+                    }
                   },
                   text: "+",
                 ),
@@ -99,7 +117,11 @@ class _MyCalculatorState extends State<MyCalculator> {
             )),
             Expanded(
               child: Row(children: [
-                ResuableButton(onTap: () {}, text: "4"),
+                ResuableButton(
+                    onTap: () {
+                      onbtnPressed("4");
+                    },
+                    text: "4"),
                 ResuableButton(
                   onTap: () {
                     onbtnPressed("5");
@@ -114,9 +136,15 @@ class _MyCalculatorState extends State<MyCalculator> {
                 ),
                 ResuableButton(
                   onTap: () {
-                    operator = "-";
-                    secondnum = "";
-                    setState(() {});
+                    if (firstnum.isEmpty) {
+                      return 
+                      operator = "-";
+                      secondnum = "";
+                      setState(() {});
+                    }
+                    // operator = "-";
+                    // secondnum = "";
+                    // setState(() {});
                   },
                   text: "-",
                 )
@@ -146,36 +174,62 @@ class _MyCalculatorState extends State<MyCalculator> {
                 ResuableButton(
                   onTap: () {
                     onbtnPressed("0");
+                    //print("1");
                   },
                   text: "0",
                 )
               ],
             )),
-            InkWell(
-              onTap: () {
-                if (operator == "+") {
-                  setState(() {
-                    result =
-                        (int.parse(firstnum) + int.parse(secondnum)).toString();
-                  });
-                } else if (operator == "-") {
-                  setState(() {
-                    result =
-                        (int.parse(firstnum) - int.parse(secondnum)).toString();
-                  });
-                }
-              },
-              child: Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(8)),
-                  width: double.infinity,
-                  child: const Center(
-                      child: Text('CALCULATE',
-                          style:
-                              TextStyle(fontSize: 20, color: Colors.yellow)))),
+            Row(
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: InkWell(
+                    onTap: () {
+                      if (operator == "+") {
+                        setState(() {
+                          result = (int.parse(firstnum) + int.parse(secondnum))
+                              .toString();
+                        });
+                      } else if (operator == "-") {
+                        setState(() {
+                          result = (int.parse(firstnum) - int.parse(secondnum))
+                              .toString();
+                        });
+                      }
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(8)),
+                        width: double.infinity,
+                        child: const Center(
+                            child: Text('CALCULATE',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.yellow)))),
+                  ),
+                ),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      butvalue("AC");
+                    },
+                    child: Container(
+                        margin: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.orange,
+                            borderRadius: BorderRadius.circular(8)),
+                        width: double.infinity,
+                        child: const Center(
+                            child: Text('AC',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.yellow)))),
+                  ),
+                ),
+              ],
             )
           ],
         ),
